@@ -1,8 +1,0 @@
-# ninja log v6
-3	601	7812757061058601	CMakeFiles/WebServerHTTP.dir/main.cpp.obj	81ac7beef2374bdb
-7	606	7812757061092131	CMakeFiles/WebServerHTTP.dir/src/MultiClientChat.cpp.obj	cf2cd0684332c5d9
-10	748	7812757061127072	CMakeFiles/WebServerHTTP.dir/src/TcpListener.cpp.obj	823668acf38ad7f2
-13	890	7812757061157130	CMakeFiles/WebServerHTTP.dir/src/WebServer.cpp.obj	1f172da470e7dd35
-890	1196	7812757069929506	WebServerHTTP.exe	8156f35729830653
-4	547	7812758774243823	CMakeFiles/WebServerHTTP.dir/main.cpp.obj	81ac7beef2374bdb
-548	796	7812758779695917	WebServerHTTP.exe	8156f35729830653
