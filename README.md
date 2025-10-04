@@ -9,19 +9,19 @@ It is not a production-ready server, but rather a **training project** for:
 - Serving static web content (HTML files)
 - Building projects with CMake
 
-- ## ✅ What has been done
-- Implemented a basic TCP listener (`TcpListener`) using Windows Sockets (WinSock2).
-- Added `WebServer` class to handle HTTP requests and serve files from **wwwroot/**.
-- Implemented multi-client chat logic (`MultiClientChat`) for practicing concurrent connections.
-- Created initial project structure:
-  - `include/` – header files  
-  - `src/` – C++ source code  
-  - `wwwroot/` – static HTML test files  
-- Added **CMake** build system for cross-platform configuration.
-- Pushed first working version to GitHub (branch `master`).
+## ✅ What has been done
+Implemented a basic TCP listener (`TcpListener`) using Windows Sockets (WinSock2).
+Added `WebServer` class to handle HTTP requests and serve files from **wwwroot/**.
+Implemented multi-client chat logic (`MultiClientChat`) for practicing concurrent connections.
+Created initial project structure:
+  `include/` – header files  
+  `src/` – C++ source code  
+  `wwwroot/` – static HTML test files  
+Added **CMake** build system for cross-platform configuration.
+Pushed first working version to GitHub (branch `master`).
 
-- ## ✅ What hasto be done
-- ### Supported/Planned Headers
+## ✅ What has to be done
+### Supported/Planned Headers
 - [ ] **Host** – virtual host routing and absolute-URI validation  
 - [ ] **User-Agent** – logging/diagnostics  
 - [ ] **Content-Length** – body size for POST/PUT and response payloads  
