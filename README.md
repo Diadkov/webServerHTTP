@@ -22,20 +22,20 @@ Pushed first working version to GitHub (branch `master`).
 
 ## ✅ What has to be done
 ### Supported/Planned Headers
-  [ ] **Host** – virtual host routing and absolute-URI validation  
-  [ ] **User-Agent** – logging/diagnostics  
-  [ ] **Content-Length** – body size for POST/PUT and response payloads  
-  [ ] **Content-Type** – MIME type detection for requests/responses  
-  [ ] **Accept-Charset** – charset negotiation (default: UTF-8)  
-  [ ] **Authorization** – Basic auth (challenge + credential check)  
-  [ ] **Date** – RFC 7231 date in responses (GMT)  
-  [ ] **Server** – server identifier (e.g., `webServerHTTP/0.1`)  
-  [ ] **Location** – redirects (301/302/307/308)  
-  [ ] **Retry-After** – back-off hints for 429/503  
-  [ ] **WWW-Authenticate** – auth challenge for 401
+  - [ ] **Host** – virtual host routing and absolute-URI validation  
+  - [ ] **User-Agent** – logging/diagnostics  
+  - [ ] **Content-Length** – body size for POST/PUT and response payloads  
+  - [ ] **Content-Type** – MIME type detection for requests/responses  
+  - [ ] **Accept-Charset** – charset negotiation (default: UTF-8)  
+  - [ ] **Authorization** – Basic auth (challenge + credential check)  
+  - [ ] **Date** – RFC 7231 date in responses (GMT)  
+  - [ ] **Server** – server identifier (e.g., `webServerHTTP/0.1`)  
+  - [ ] **Location** – redirects (301/302/307/308)  
+  - [ ] **Retry-After** – back-off hints for 429/503  
+  - [ ] **WWW-Authenticate** – auth challenge for 401
 
 ### Default Error Pages
 Built-in HTML pages are returned if custom ones are not provided:
-  [ ] **404 Not Found** – resource does not exist  
-  [ ] **403 Forbidden** – access denied  
-  [ ] **500 Internal Server Error** – unexpected server error
+  - [ ] **404 Not Found** – resource does not exist  
+  - [ ] **403 Forbidden** – access denied  
+  - [ ] **500 Internal Server Error** – unexpected server error
