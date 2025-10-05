@@ -10,7 +10,7 @@
 #include <ctime>
 #include <algorithm>
 #include <cctype>
-
+#include <charconv>
 
 #include "WebServer.h"
 
@@ -129,6 +129,41 @@ void WebServer::onMessageReceived(int clientSocket, std::string_view msg, int le
     // Send response (exact number of bytes, no extra null terminator)
     std::string response = oss.str();
     sendToClient(clientSocket, response.c_str(), static_cast<int>(response.size()));
+}
+
+std::pair<std::string, int> WebServer::loadConfigFile(void)
+{
+    std::ifstream fs("../../../resources/config.conf");
+    
+    if (!fs.is_open())
+        return std::make_pair("", -1);
+
+    int port;
+    std::string host, line;
+    while (std::getline(fs, line))
+    {
+        if (line.empty() || line[0] == '#')
+            continue;
+        std::string key, value;
+        std::istringstream iss(line);
+        iss >> key >> value;
+
+        while (!value.empty() && (value.back() == ';' || value.back() == '\r'))
+            value.pop_back();
+
+        if (key == "host")
+            host = value;
+        else if (key == "port")
+        {
+            int tmp;
+            auto [ptr, ec] = std::from_chars(value.data(), value.data() + value.size(), tmp);
+            if (ec == std::errc()) port = tmp;
+        }
+        // host 127.0.0.1;
+        // port 8080;
+        // add other
+    }
+    return std::pair<std::string, int>{host, port};
 }
 
 // Handler for client connections

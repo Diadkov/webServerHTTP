@@ -2,7 +2,7 @@
 
 int main()
 {
-	WebServer webServer("0.0.0.0", 8080);
+	WebServer webServer;
 	if (webServer.init() != 0)
 		return -1;
 
