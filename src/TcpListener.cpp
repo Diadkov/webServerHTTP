@@ -17,10 +17,12 @@ int TcpListener::init()
 
 	// Create a socket
 	m_socket = socket(AF_INET, SOCK_STREAM, 0);
+	u_long iMode = 1ul;
+
 	if (m_socket == INVALID_SOCKET)
-	{
 		return WSAGetLastError();
-	}
+	if (ioctlsocket(m_socket, FIONBIO, &iMode) == SOCKET_ERROR)
+		return WSAGetLastError();
 
 	// Bind the ip address and port to a socket
 	sockaddr_in hint;
