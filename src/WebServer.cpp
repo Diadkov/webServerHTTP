@@ -151,17 +151,12 @@ std::pair<std::string, int> WebServer::loadConfigFile(void)
         while (!value.empty() && (value.back() == ';' || value.back() == '\r'))
             value.pop_back();
 
-        if (key == "host")
-            host = value;
-        else if (key == "port")
+        if (key == "listen")
         {
-            int tmp;
-            auto [ptr, ec] = std::from_chars(value.data(), value.data() + value.size(), tmp);
-            if (ec == std::errc()) port = tmp;
+            size_t pos = value.find(':');
+            host = value.substr(0, pos);
+            port = std::stoi(value.substr(pos + 1, value.size()));
         }
-        // host 127.0.0.1;
-        // port 8080;
-        // add other
     }
     return std::pair<std::string, int>{host, port};
 }
