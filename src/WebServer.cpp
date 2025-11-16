@@ -1,4 +1,4 @@
-#include <string>
+﻿#include <string>
 #include <istream>
 #include <sstream>
 #include <fstream>
@@ -21,6 +21,8 @@ std::string getCurrentDate() {
     std::strftime(buf, sizeof(buf), "%a, %d %b %Y %H:%M:%S GMT", gmt);
     return std::string(buf);
 }
+
+#include <filesystem>
 
 // Handler for when a message is received from the client
 void WebServer::onMessageReceived(int clientSocket, std::string_view msg, int length)
@@ -77,11 +79,73 @@ void WebServer::onMessageReceived(int clientSocket, std::string_view msg, int le
     std::string content = "<h1>404 Not Found</h1>";
     std::string htmlFile = "/index.html";
     int         statusCode = 404;
+    
+    /**
+     * HTTP requests may include a query string (e.g. "foo.html?").
+     * This function removes everything starting from the '?' character
+     */
+    size_t pos = target.find('?');
+    if(pos != std::string::npos)
+        target = target.substr(0, pos);
+        
+    std::cout << "method : " << method << std::endl;
+    std::cout << "target : " << target << std::endl;
+    std::cout << "version : " << version << std::endl;
 
     // If this is a valid GET request, extract the requested path
     if (method == "GET" && !target.empty())
     {
         htmlFile = (target == "/") ? "/index.html" : target;
+    }
+    else if (method =="DELETE" && !target.empty())
+    {
+        std::string path = "wwwroot/foo.html";
+        htmlFile = (target == "/") ? "/index.html" : target;// fix later
+        // read
+        
+        std::ifstream file(path);
+        if (file.is_open())
+        {
+            std::cout << "File opened!" << std::endl;
+            std::vector<std::string> lines;
+
+            std::string line;
+            while (std::getline(file, line))
+                lines.push_back(line);
+            file.close();
+
+            for (auto& text : lines) {
+                size_t pos = text.find("/body");
+                if (pos != std::string::npos) {
+                    if (pos > 0) 
+                    {
+                        text[pos - 1] = '*';
+                        std::cout << "never will be here";
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << text;
+                        std::cout << "NOt in file !\n";
+                    }
+                }
+            }
+            for (auto& text : lines)
+                std::cout << text;
+
+            std::ofstream rewritedFile(path, std::ios::trunc);
+            if (!rewritedFile.is_open())
+            {
+                std::cout << "Error opening file\n";
+            }
+            else
+            {
+                std::cout << "written to file\n";
+            }
+            for (auto& l : lines) 
+                rewritedFile << l << "\n";
+            rewritedFile.close();
+        }
     }
     else // other methods
     {
