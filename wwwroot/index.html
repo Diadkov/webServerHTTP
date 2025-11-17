@@ -16,7 +16,19 @@
         function deleteLast() {
             fetch("/text", { method: "DELETE" });
         }
-    </script>   
+    </script>
+    <br>
+    <button onclick="addText()">Add new text in foo.html</button>
+
+    <script>
+        function addText() {
+            fetch("/text", {
+                method: "POST",
+                body: "some text to add"
+            });
+        }
+    </script>
+
 
 
 </body>
