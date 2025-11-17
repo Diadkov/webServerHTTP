@@ -1,4 +1,4 @@
-#include <string>
+﻿#include <string>
 #include <istream>
 #include <sstream>
 #include <fstream>
@@ -14,6 +14,73 @@
 
 #include "WebServer.h"
 
+void WebServer::removeLastCharBeforeBody(const std::string& path)
+{
+    std::ifstream file(path);
+    if (!file.is_open()) return;
+
+    std::vector<std::string> lines;
+    std::string line;
+
+    while (std::getline(file, line))
+        lines.push_back(line);
+
+    file.close();
+
+    int bodyIndex = -1;
+    for (int i = 0; i < (int)lines.size(); ++i)
+    {
+        if (lines[i].find("</body>") != std::string::npos)
+        {
+            bodyIndex = i;
+            break;
+        }
+    }
+
+    if (bodyIndex <= 0) return;
+
+    std::string& lineBefore = lines[bodyIndex - 1];
+    if (!lineBefore.empty())
+        lineBefore.pop_back();
+
+    std::ofstream out(path, std::ios::trunc);
+    for (const auto& l : lines)
+        out << l << "\n";
+}
+
+
+void WebServer::insertTextBeforeBody(const std::string& path, const std::string& text)
+{
+    std::ifstream file(path);
+    if (!file.is_open()) return;
+
+    std::vector<std::string> lines;
+    std::string line;
+
+    while (std::getline(file, line))
+        lines.push_back(line);
+
+    file.close();
+
+    int bodyIndex = -1;
+    for (int i = 0; i < (int)lines.size(); ++i)
+    {
+        if (lines[i].find("</body>") != std::string::npos)
+        {
+            bodyIndex = i;
+            break;
+        }
+    }
+
+    if (bodyIndex == -1) return;
+
+    lines.insert(lines.begin() + bodyIndex, text);
+
+    std::ofstream out(path, std::ios::trunc);
+    for (const auto& l : lines)
+        out << l << "\n";
+}
+
 std::string getCurrentDate() {
     std::time_t t = std::time(nullptr);
     std::tm* gmt = std::gmtime(&t);
@@ -21,6 +88,8 @@ std::string getCurrentDate() {
     std::strftime(buf, sizeof(buf), "%a, %d %b %Y %H:%M:%S GMT", gmt);
     return std::string(buf);
 }
+
+#include <filesystem>
 
 // Handler for when a message is received from the client
 void WebServer::onMessageReceived(int clientSocket, std::string_view msg, int length)
@@ -77,11 +146,42 @@ void WebServer::onMessageReceived(int clientSocket, std::string_view msg, int le
     std::string content = "<h1>404 Not Found</h1>";
     std::string htmlFile = "/index.html";
     int         statusCode = 404;
+    
+    /**
+     * HTTP requests may include a query string (e.g. "foo.html?").
+     * This function removes everything starting from the '?' character
+     */
+    size_t pos = target.find('?');
+    if(pos != std::string::npos)
+        target = target.substr(0, pos);
+        
+    std::cout << "method : " << method << std::endl;
+    std::cout << "target : " << target << std::endl;
+    std::cout << "version : " << version << std::endl;
 
     // If this is a valid GET request, extract the requested path
     if (method == "GET" && !target.empty())
     {
         htmlFile = (target == "/") ? "/index.html" : target;
+    }
+    else if (method =="DELETE" && !target.empty())
+    {
+        std::string path = "wwwroot/foo.html";
+        removeLastCharBeforeBody(path);
+    }
+    else if (method == "POST" && !target.empty())
+    {
+        std::string body;
+
+        auto it = headers.find("content-length");
+        if (it != headers.end())
+        {
+            int separarorLength = 4; // \n\r\n\r
+            int contentLength = std::stoi(it->second);
+            body = request.substr(hdrsEnd + separarorLength, contentLength);
+        }
+
+        insertTextBeforeBody("wwwroot/foo.html", body);
     }
     else // other methods
     {

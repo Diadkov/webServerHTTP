@@ -60,4 +60,8 @@ protected:
 	 * the actual message length.
 	 */
 	virtual void onMessageReceived(int clientSocket, std::string_view msg, int length);
+
+private:
+	void removeLastCharBeforeBody(const std::string& path);
+	void insertTextBeforeBody(const std::string& path, const std::string& text);
 };
